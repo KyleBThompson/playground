@@ -1,0 +1,35 @@
+_ReSharper.*
+bin
+obj
+Bin
+Obj
+*.user
+*.suo
+*.pubxml
+*.nupkg
+*.tlh
+.svn
+*.Publish.xml
+*.sln.cache
+ReleaseImage
+!**/packages/*/lib/*.dll 
+*.orig
+!**/lib/**/*
+**/Assemblies/**/*.dll
+.idea
+*.trx
+*.Publish.xml
+*.docstates
+*1.1.dotCover
+*Web - Copy.config
+*-Errors.log
+
+
+#ignore visual studio 2015 .vs folder
+netclaim/netclaim/base/netclaimwebapplicationcp/.vs
+netclaim/netclaim/.vs
+.vs
+
+#ignore nuget packages folder
+netclaim/packages
+packages
