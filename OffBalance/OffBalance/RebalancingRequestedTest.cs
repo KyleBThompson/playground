@@ -96,7 +96,8 @@ namespace OffBalance
     [Fact (Skip = "end-to-end, makes external api call")]
     //[Fact]
     public void For_real() {
-      var client = new StockApiClient("G0YZD9816SN1RU8V");
+      // remove Skip property and add api key below to run against live API
+      var client = new StockApiClient("Api key goes here");
       var balancer = new Balancer(client);
       var currentPortfolio = new Portfolio(new List<PortfolioStock> {
         new PortfolioStock(symbol: "AAPL", shares: 50),
@@ -116,6 +117,17 @@ namespace OffBalance
       WriteOutput(actions, updatedPortfolio);
     }
 
+    private void WriteOutput(List<ActionResult> actions, Portfolio updatedPortfolio) {
+      foreach (var action in actions.OrderBy(x => x.Shares)) {
+        var verb = action.Shares > 0 ? "buy" : "sell";
+        _output.WriteLine($"{action.Symbol}: {verb} {Math.Abs(action.Shares)} shares");
+      }
+
+      _output.WriteLine("");
+      foreach (var stock in updatedPortfolio.Stocks.OrderByDescending(x => x.AllocationPercentage)) {
+        _output.WriteLine($"{stock.Symbol}, {stock.Shares} shares, {Math.Round(stock.AllocationPercentage, 0)}%");
+      }
+    }
 
     private void SetupStockPrices(List<(string stock, decimal price)> stockPrices, DateTime today) {
       var stocks = stockPrices.Select(x => x.stock);
@@ -139,16 +151,5 @@ namespace OffBalance
       Assert.Equal(expectedShares, stock.Shares);
     }
 
-    private void WriteOutput(List<ActionResult> actions, Portfolio updatedPortfolio) {
-      foreach (var action in actions.OrderBy(x => x.Shares)) {
-        var verb = action.Shares > 0 ? "buy" : "sell";
-        _output.WriteLine($"{action.Symbol}: {verb} {Math.Abs(action.Shares)} shares");
-      }
-
-      _output.WriteLine("");
-      foreach (var stock in updatedPortfolio.Stocks.OrderByDescending(x => x.AllocationPercentage)) {
-        _output.WriteLine($"{stock.Symbol}, {stock.Shares} shares, {Math.Round(stock.AllocationPercentage, 0)}%");
-      }
-    }
   }
 }
